@@ -2,11 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="assets/img/logos/logo-mark.png">
-    <meta property="og:type" content="website">
-  <meta property="og:url" content="https://dogpoopsmells.com/quote.html">
-  <meta property="og:image" content="https://dogpoopsmells.com/assets/img/dd-truck-hero.jpeg">
-  <meta property="og:description" content="Get an instant free quote for pet waste removal in North Georgia. No waiting, no commitment.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Get Your Free Quote – Dirty Dawgs | Pet Waste Removal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -227,6 +222,7 @@
       background: var(--dark);
       padding: 28px 32px 24px;
       text-align: center;
+      scroll-margin-top: 80px;
     }
     .price-banner-label {
       font-size: .72rem;
@@ -501,14 +497,6 @@
       .radio-group { flex-direction: column; }
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GL9GH8QCX8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-GL9GH8QCX8');
-  </script>
 </head>
 <body>
 
@@ -875,7 +863,9 @@
 
       document.getElementById('quoteForm').style.display      = 'none';
       document.getElementById('priceAndSignup').style.display = 'block';
-      document.querySelector('.qcard-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      requestAnimationFrame(function() {
+        document.querySelector('.price-banner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     // ── Step 2 → success: submit signup form ─────────────────
@@ -922,7 +912,9 @@
         if (res.ok) {
           document.getElementById('priceAndSignup').style.display = 'none';
           document.getElementById('signupSuccess').style.display  = 'block';
-          document.querySelector('.qcard-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          requestAnimationFrame(function() {
+            document.getElementById('signupSuccess').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
         } else {
           btn.disabled    = false;
           btn.textContent = 'Complete My Sign Up';
@@ -937,7 +929,7 @@
 
     // ── Stripe init — LAST so it never blocks form listeners ──
     (function initStripe() {
-      var STRIPE_KEY = 'pk_test_51SfB1LCysA1sdvYJVGc9tn6KtMwYG8KvRTo6hZaqdbl8fq6JkA7IbDKHDYFLQiut2Kh3nS6qLaF0UoS0O7AiFhey00VMTBeeFW';
+      var STRIPE_KEY = 'pk_live_51SfB1LCysA1sdvYJGCNhAIBWzXZkKxsFIkhoxVh4CX8HVxVgzbyKRG9CceSSPef540DA5PfBPUkPbT8vsD55Pt3W00gyDVbYs2';
       try {
         stripe      = Stripe(STRIPE_KEY);
         var elems   = stripe.elements({
