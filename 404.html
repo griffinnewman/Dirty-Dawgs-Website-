@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/img/logos/logo-mark.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found – Dirty Dawgs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .e404-page {
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .e404-logo { height: 72px; width: auto; margin-bottom: 32px; }
+    .e404-code {
+      font-family: var(--font-slab);
+      font-size: 7rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .e404-headline {
+      font-family: var(--font-slab);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: #fff;
+      margin-bottom: 14px;
+    }
+    .e404-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,.55);
+      max-width: 400px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+    .e404-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GL9GH8QCX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GL9GH8QCX8');
+  </script>
+</head>
+<body>
+  <div class="e404-page">
+    <img src="assets/img/logos/logo-mark.png" alt="Dirty Dawgs" class="e404-logo">
+    <div class="e404-code">404</div>
+    <h1 class="e404-headline">We can't scoop this page.</h1>
+    <p class="e404-sub">Looks like this page doesn't exist — but your yard cleanup does. Head back home and get a free quote.</p>
+    <div class="e404-actions">
+      <a href="index.html" class="btn btn-primary btn-lg">Back to Home</a>
+      <a href="quote.html" class="btn btn-outline btn-lg" style="color:#fff;border-color:rgba(255,255,255,.3);">Get a Free Quote</a>
+    </div>
+  </div>
+</body>
+</html>

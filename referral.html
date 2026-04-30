@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/img/logos/logo-mark.png">
+    <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dogpoopsmells.com/referral.html">
+  <meta property="og:image" content="https://dogpoopsmells.com/assets/img/dd-truck-hero.jpeg">
+  <meta property="og:description" content="Refer a friend to Dirty Dawgs and earn $25 off your next service. Share the scoop!">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refer a Friend – Dirty Dawgs | Earn $25 Off</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GL9GH8QCX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GL9GH8QCX8');
+  </script>
+</head>
+<body>
+
+  <div class="ann-bar">
+    <div class="ann-inner">
+      <span><strong>Claim Your FREE Cleanup Today!</strong> Sign up for regular service and get your first cleanup free.</span>
+      <a href="index.html#free-quote" class="ann-cta">Claim Offer →</a>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-wrap container">
+      <a href="index.html" class="nav-logo"><img src="assets/img/logos/logo-nav.png" alt="Dirty Dawgs" class="logo-img"></a>
+      <nav class="nav-links" id="navLinks">
+        <div class="nav-item has-drop"><a href="#">Services ▾</a><div class="dropdown"><a href="services/residential.html">Residential</a><a href="services/commercial.html">Commercial</a><a href="services/deodorizer.html">Deodorizer</a></div></div>
+        <a href="referral.html">Refer a Friend</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <div class="nav-item has-drop"><a href="locations/index.html">Locations ▾</a><div class="dropdown"><a href="locations/athens.html">Athens, GA</a><a href="locations/jefferson.html">Jefferson, GA</a><a href="locations/buford.html">Buford, GA</a><a href="locations/braselton.html">Braselton, GA</a><a href="locations/gainesville.html">Gainesville, GA</a><a href="locations/flowery-branch.html">Flowery Branch, GA</a></div></div>
+      </nav>
+      <a href="https://client.sweepandgo.com/login" class="btn btn-outline-nav" target="_blank" rel="noopener">Client Login</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-hero-eyebrow">Refer a Friend</span>
+      <h1>Earn $25. Spread the Love.</h1>
+      <p class="page-hero-sub">Friends shouldn't let friends scoop their own dog poop. Refer someone to Dirty Dawgs and earn $25 off your next bill — for every successful referral.</p>
+    </div>
+  </section>
+
+  <!-- REFERRAL SECTION -->
+  <style>
+    .ref-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    .ref-card-top {
+      background: var(--dark);
+      padding: 18px 28px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .ref-card-top img { height: 34px; width: auto; }
+    .ref-card-top-txt h3 { font-family: var(--font-slab); font-size: 1rem; color: #fff; margin-bottom: 2px; }
+    .ref-card-top-txt p  { font-size: .76rem; color: rgba(255,255,255,.5); }
+    .ref-form-body { padding: 24px 28px 28px; }
+    .ref-section-lbl {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted);
+      border-bottom: 1px solid var(--light-gray);
+      padding-bottom: 8px; margin-bottom: 16px; margin-top: 20px;
+    }
+    .ref-section-lbl:first-child { margin-top: 0; }
+    .ref-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ref-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+    .ref-field label { font-size: .75rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: .7px; }
+    .ref-field label em { font-style: normal; color: var(--gold); }
+    .ref-input {
+      border: 1.5px solid #dde0e4; border-radius: 8px;
+      padding: 10px 12px; font-size: .92rem;
+      font-family: var(--font); color: var(--text);
+      outline: none; width: 100%;
+      transition: border-color .15s;
+    }
+    .ref-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(192,149,58,.1); }
+    .ref-submit {
+      width: 100%; padding: 14px; margin-top: 6px;
+      background: var(--gold); color: #fff; border: none;
+      border-radius: 8px; font-size: 1rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer;
+      transition: background .2s;
+    }
+    .ref-submit:hover { background: var(--gold-dark); }
+    .ref-submit:disabled { opacity: .6; cursor: not-allowed; }
+    .ref-success {
+      display: none; text-align: center; padding: 36px 28px;
+    }
+    .ref-success-icon {
+      width: 60px; height: 60px; background: var(--teal-light);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 16px; color: var(--teal);
+    }
+    .ref-success-icon svg { width: 30px; height: 30px; }
+    .ref-success h3 { font-family: var(--font-slab); font-size: 1.3rem; color: var(--dark); margin-bottom: 8px; }
+    .ref-success p  { font-size: .88rem; color: var(--text-muted); line-height: 1.6; }
+    @media (max-width: 700px) {
+      .ref-row { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+
+  <section class="referral-section" id="referral">
+    <div class="container referral-inner">
+
+      <!-- LEFT: info -->
+      <div class="referral-text">
+        <h2>Refer a Friend, Earn $25</h2>
+        <p class="referral-tagline"><em>Friends shouldn't let friends scoop their own dog poop!</em></p>
+        <p>There's no limit — earn <strong>$25 off your next bill</strong> for every friend who signs up for recurring service. Fill out the form and we'll take it from there.</p>
+        <div class="hiw-grid" style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+          <div class="hiw-card">
+            <div class="hiw-number">1</div>
+            <h3>You Refer</h3>
+            <p>Submit your friend's info using the form.</p>
+          </div>
+          <div class="hiw-card">
+            <div class="hiw-number">2</div>
+            <h3>They Sign Up</h3>
+            <p>Your friend signs up for regular recurring service.</p>
+          </div>
+          <div class="hiw-card">
+            <div class="hiw-number">3</div>
+            <h3>You Earn $25</h3>
+            <p>$25 is applied to your next bill automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: referral form -->
+      <div class="ref-card">
+        <div class="ref-card-top">
+          <img src="assets/img/logos/logo-mark.png" alt="Dirty Dawgs">
+          <div class="ref-card-top-txt">
+            <h3>Submit a Referral</h3>
+            <p>We'll reach out to your friend directly</p>
+          </div>
+        </div>
+
+        <div class="ref-form-body">
+          <form id="refForm" novalidate>
+            <input type="hidden" name="_subject" value="New Referral – Dirty Dawgs">
+
+            <p class="ref-section-lbl">Your Information</p>
+            <div class="ref-row">
+              <div class="ref-field">
+                <label for="rfMyFirst">First Name <em>*</em></label>
+                <input type="text" id="rfMyFirst" name="Your First Name" class="ref-input" required placeholder="Jane">
+              </div>
+              <div class="ref-field">
+                <label for="rfMyLast">Last Name <em>*</em></label>
+                <input type="text" id="rfMyLast" name="Your Last Name" class="ref-input" required placeholder="Smith">
+              </div>
+            </div>
+            <div class="ref-field">
+              <label for="rfMyEmail">Your Email <em>*</em></label>
+              <input type="email" id="rfMyEmail" name="Your Email" class="ref-input" required placeholder="jane@email.com">
+            </div>
+
+            <p class="ref-section-lbl">Your Friend's Information</p>
+            <div class="ref-row">
+              <div class="ref-field">
+                <label for="rfFrFirst">Friend's First Name <em>*</em></label>
+                <input type="text" id="rfFrFirst" name="Friend First Name" class="ref-input" required placeholder="Alex">
+              </div>
+              <div class="ref-field">
+                <label for="rfFrLast">Friend's Last Name <em>*</em></label>
+                <input type="text" id="rfFrLast" name="Friend Last Name" class="ref-input" required placeholder="Johnson">
+              </div>
+            </div>
+            <div class="ref-field">
+              <label for="rfFrEmail">Friend's Email <em>*</em></label>
+              <input type="email" id="rfFrEmail" name="Friend Email" class="ref-input" required placeholder="alex@email.com">
+            </div>
+
+            <button type="submit" class="ref-submit" id="refSubmitBtn">Submit Referral</button>
+          </form>
+
+          <div class="ref-success" id="refSuccess">
+            <div class="ref-success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3>Referral Submitted!</h3>
+            <p>Thanks for spreading the word! We'll reach out to your friend. Your $25 discount will be applied once they sign up for service.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section class="promises ref-terms-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Referral Terms</h2>
+        <p>Simple, transparent, no fine print</p>
+      </div>
+      <div class="promises-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div class="promise-card">
+          <div class="promise-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3>No Limit on Referrals</h3>
+          <p>Refer as many friends as you like. Each one who signs up earns you another $25 off.</p>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>Active Customer Required</h3>
+          <p>Both you and your referred friend must be on an active recurring service plan to qualify.</p>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <h3>Applied Automatically</h3>
+          <p>Your discount is applied to your next invoice — no coupon codes or extra steps needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP CTA -->
+  <section class="signup-cta">
+    <div class="container cta-inner">
+      <div class="cta-text">
+        <h2>Not a Customer Yet?</h2>
+        <p>Sign up today and get your first cleanup free. Then start referring friends to save even more.</p>
+        <div class="zip-input-group zip-input-group--dark">
+          <input type="text" class="zip-input" placeholder="Zip Code" maxlength="5" inputmode="numeric" aria-label="Zip code">
+          <a href="index.html#free-quote" class="btn btn-primary btn-lg">Free Quote</a>
+        </div>
+      </div>
+      <div class="cta-dog-wrap">
+        <img src="assets/svg/Dog_Laptop.svg" alt="" class="cta-dog">
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <img src="assets/img/logos/logo-footer.png" alt="Dirty Dawgs" height="48" class="footer-logo">
+        <p>Your trusted professional pet waste removal service — we keep your yard clean so you don't have to.</p>
+        <div class="footer-contact">
+          <p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> Athens, GA</p>
+          <p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> <a href="mailto:contact@dirtydawgss.com">contact@dirtydawgss.com</a></p>
+                    <p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.4 19.79 19.79 0 0 1 1.61 2.18 2 2 0 0 1 3.6 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 7.91a16 16 0 0 0 6 6l.72-.72a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.17z"/></svg></span> <a href="tel:6783279646">(678) 327-9646</a></p>
+<p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Mon–Sat 7:30am – 6pm</p>
+        </div>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/DirtyDawgss" aria-label="Facebook" class="social-link" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://www.instagram.com/dirtdawgss/" aria-label="Instagram" class="social-link" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-nav"><h4>Services</h4><ul><li><a href="services/residential.html">Residential</a></li><li><a href="services/commercial.html">Commercial</a></li><li><a href="services/deodorizer.html">Deodorizer</a></li></ul></div>
+      <div class="footer-nav"><h4>Locations</h4><ul><li><a href="locations/athens.html">Athens, GA</a></li><li><a href="locations/gainesville.html">Gainesville, GA</a></li><li><a href="locations/buford.html">Buford, GA</a></li><li><a href="locations/monroe.html">Monroe, GA</a></li><li><a href="locations/index.html">View All Areas</a></li></ul></div>
+      <div class="footer-nav"><h4>About</h4><ul><li><a href="about.html">About Us</a></li><li><a href="faq.html">FAQ</a></li><li><a href="referral.html">Referrals</a></li><li><a href="mailto:contact@dirtydawgss.com">Contact</a></li></ul></div>
+      <div class="footer-nav"><h4>Resources</h4><ul><li><a href="https://client.sweepandgo.com/login" target="_blank" rel="noopener">Client Login</a></li><li><a href="referral.html">Refer a Friend</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div class="container footer-bottom-inner"><p>© 2026 Dirty Dawgs • Your Trusted Pet Waste Removers</p></div></div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('refForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Validate — highlight any empty required fields
+      var valid = true;
+      this.querySelectorAll('[required]').forEach(function(el) {
+        el.style.borderColor = '';
+        if (!el.value.trim()) { el.style.borderColor = '#e05c5c'; valid = false; }
+      });
+      if (!valid) return;
+
+      // Collect data and send to Formspree in the background
+      var formData = new FormData(this);
+      formData.append('_subject', 'New Referral – Dirty Dawgs');
+      formData.append('Your Name',    document.getElementById('rfMyFirst').value + ' ' + document.getElementById('rfMyLast').value);
+      formData.append('Your Email',   document.getElementById('rfMyEmail').value);
+      formData.append('Friend Name',  document.getElementById('rfFrFirst').value + ' ' + document.getElementById('rfFrLast').value);
+      formData.append('Friend Email', document.getElementById('rfFrEmail').value);
+
+      fetch('https://formspree.io/f/xjglbbdl', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).catch(function() {}); // silent — success screen shows regardless
+
+      // Always show success immediately on the page
+      document.getElementById('refForm').style.display    = 'none';
+      document.getElementById('refSuccess').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

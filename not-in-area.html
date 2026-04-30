@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/img/logos/logo-mark.png">
+    <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dogpoopsmells.com/not-in-area.html">
+  <meta property="og:image" content="https://dogpoopsmells.com/assets/img/dd-truck-hero.jpeg">
+  <meta property="og:description" content="We're expanding fast across Georgia! Leave your info and we'll reach out when we service your area.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We Might Not Service Your Area Yet – Dirty Dawgs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .nia-hero {
+      background: var(--dark);
+      padding: 64px 0 56px;
+      text-align: center;
+    }
+    .nia-icon {
+      width: 72px; height: 72px;
+      background: rgba(192,149,58,.15);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px;
+    }
+    .nia-icon svg { width: 36px; height: 36px; color: var(--gold); }
+    .nia-badge {
+      display: inline-block;
+      background: rgba(192,149,58,.15);
+      color: var(--gold);
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      padding: 4px 14px; border-radius: 50px;
+      margin-bottom: 16px;
+    }
+    .nia-hero h1 {
+      font-family: var(--font-slab);
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      color: #fff; margin-bottom: 14px; line-height: 1.15;
+    }
+    .nia-hero p {
+      font-size: 1rem; color: rgba(255,255,255,.6);
+      max-width: 500px; margin: 0 auto 8px; line-height: 1.7;
+    }
+    .nia-zip-note {
+      font-size: .85rem; color: rgba(255,255,255,.35);
+      margin-top: 6px;
+    }
+    .nia-form-section {
+      background: var(--off-white); padding: 52px 0 80px;
+    }
+    .nia-card {
+      max-width: 560px; margin: 0 auto;
+      background: #fff; border-radius: var(--radius);
+      box-shadow: var(--shadow-md); overflow: hidden;
+    }
+    .nia-card-top {
+      background: var(--teal); padding: 18px 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .nia-card-top svg { width: 22px; height: 22px; color: #fff; flex-shrink: 0; }
+    .nia-card-top p { font-size: .92rem; font-weight: 600; color: #fff; }
+    .nia-form { padding: 28px 32px 36px; }
+    .nf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .nf-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 18px; }
+    .nf-group label { font-size: .75rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: .8px; }
+    .nf-group label em { font-style: normal; color: var(--gold); margin-left: 1px; }
+    .nf-control {
+      border: 1.5px solid #dde0e4; border-radius: 8px;
+      padding: 11px 13px; font-size: .93rem;
+      font-family: var(--font); color: var(--text);
+      background: #fff; outline: none; width: 100%;
+      transition: border-color .15s;
+    }
+    .nf-control:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(59,92,69,.1); }
+    .nf-control.prefilled { background: #fffef5; border-color: var(--gold); font-weight: 600; }
+    .nf-submit {
+      width: 100%; padding: 15px; background: var(--teal); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer; transition: background .2s;
+    }
+    .nf-submit:hover { background: var(--teal-dark); }
+    .nf-submit:disabled { opacity: .6; cursor: not-allowed; }
+    .nia-success {
+      display: none; padding: 48px 32px; text-align: center;
+    }
+    .nia-success-icon {
+      width: 64px; height: 64px; background: var(--teal-light);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 18px; color: var(--teal);
+    }
+    .nia-success-icon svg { width: 32px; height: 32px; }
+    .nia-success h2 { font-family: var(--font-slab); font-size: 1.4rem; color: var(--dark); margin-bottom: 10px; }
+    .nia-success p  { font-size: .9rem; color: var(--text-muted); max-width: 320px; margin: 0 auto 24px; line-height: 1.65; }
+    .nia-areas-link {
+      display: inline-block; margin-top: 20px;
+      font-size: .85rem; color: var(--teal); font-weight: 600;
+    }
+    @media (max-width: 580px) {
+      .nia-form, .nia-card-top { padding-left: 20px; padding-right: 20px; }
+      .nf-row { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GL9GH8QCX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GL9GH8QCX8');
+  </script>
+</head>
+<body>
+
+  <div class="ann-bar">
+    <div class="ann-inner">
+      <span><strong>Dirty Dawgs</strong> — Your Trusted Pet Waste Removers</span>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-wrap container">
+      <a href="index.html" class="nav-logo"><img src="assets/img/logos/logo-nav.png" alt="Dirty Dawgs" class="logo-img"></a>
+      <nav class="nav-links" id="navLinks">
+        <div class="nav-item has-drop"><a href="#">Services ▾</a><div class="dropdown">
+          <a href="services/residential.html">Residential</a>
+          <a href="services/commercial.html">Commercial</a>
+          <a href="services/deodorizer.html">Deodorizer</a>
+        </div></div>
+        <a href="referral.html">Refer a Friend</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <div class="nav-item has-drop"><a href="locations/index.html">Locations ▾</a><div class="dropdown">
+          <a href="locations/athens.html">Athens, GA</a>
+          <a href="locations/jefferson.html">Jefferson, GA</a>
+          <a href="locations/buford.html">Buford, GA</a>
+          <a href="locations/braselton.html">Braselton, GA</a>
+          <a href="locations/gainesville.html">Gainesville, GA</a>
+          <a href="locations/flowery-branch.html">Flowery Branch, GA</a>
+        </div></div>
+      </nav>
+      <a href="https://client.sweepandgo.com/login" class="btn btn-outline-nav" target="_blank" rel="noopener">Client Login</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="nia-hero">
+    <div class="container">
+      <div class="nia-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="nia-badge" id="zipBadge" style="display:none;"></div>
+      <h1>We Might Not Service Your Area Yet</h1>
+      <p>We're growing fast across Northeast Georgia! Leave your info below and we'll reach out as soon as we expand to your area.</p>
+      <p class="nia-zip-note" id="zipNote"></p>
+      <a href="locations/index.html" class="nia-areas-link" style="color:rgba(255,255,255,.45);font-size:.82rem;display:inline-block;margin-top:10px;">See our current service areas →</a>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <section class="nia-form-section">
+    <div class="container">
+      <div class="nia-card">
+        <div class="nia-card-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <p>We'll contact you when we expand to your area</p>
+        </div>
+
+        <div class="nia-form">
+          <!--
+            FORMSPREE SETUP:
+            Replace YOUR_FORM_ID with your Formspree form ID
+            (formspree.io → New Form → "Dirty Dawgs Out-of-Area Leads")
+          -->
+          <form id="niaForm" action="https://formspree.io/f/mvzlogao" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="Out-of-Area Lead – Dirty Dawgs">
+            <input type="hidden" name="Zip Code" id="hNiaZip">
+
+            <div class="nf-row">
+              <div class="nf-group">
+                <label for="niaFirst">First Name <em>*</em></label>
+                <input type="text" id="niaFirst" name="First Name" class="nf-control" required placeholder="Jane">
+              </div>
+              <div class="nf-group">
+                <label for="niaLast">Last Name <em>*</em></label>
+                <input type="text" id="niaLast" name="Last Name" class="nf-control" required placeholder="Smith">
+              </div>
+            </div>
+
+            <div class="nf-group">
+              <label for="niaEmail">Email Address <em>*</em></label>
+              <input type="email" id="niaEmail" name="Email" class="nf-control" required placeholder="jane@email.com">
+            </div>
+
+            <div class="nf-group">
+              <label for="niaPhone">Phone Number <em>*</em></label>
+              <input type="tel" id="niaPhone" name="Phone" class="nf-control" required placeholder="(678) 555-0100">
+            </div>
+
+            <div class="nf-group">
+              <label for="niaCity">City / Neighborhood</label>
+              <input type="text" id="niaCity" name="City" class="nf-control" placeholder="e.g. Alpharetta, Cumming...">
+            </div>
+
+            <div class="nf-group">
+              <label for="niaDogs">How many dogs do you have?</label>
+              <select id="niaDogs" name="Number of Dogs" class="nf-control">
+                <option value="" disabled selected>Select...</option>
+                <option>1</option><option>2</option><option>3</option><option>4 or more</option>
+              </select>
+            </div>
+
+            <button type="submit" class="nf-submit" id="niaSubmitBtn">Notify Me When You're in My Area</button>
+            <p style="text-align:center;font-size:.78rem;color:var(--text-muted);margin-top:10px;">
+              We'll reach out by email as soon as we expand your way.
+            </p>
+          </form>
+
+          <div class="nia-success" id="niaSuccess">
+            <div class="nia-success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>You're on the List!</h2>
+            <p>We'll contact you as soon as Dirty Dawgs expands to your area. Thank you for your interest!</p>
+            <a href="index.html" class="btn btn-outline-teal">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <img src="assets/img/logos/logo-footer.png" alt="Dirty Dawgs" height="48" class="footer-logo">
+        <p>Your trusted professional pet waste removal service.</p>
+        <div class="footer-contact">
+          <p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><a href="mailto:contact@dirtydawgss.com">contact@dirtydawgss.com</a></p>
+        </div>
+      </div>
+      <div class="footer-nav"><h4>Services</h4><ul><li><a href="services/residential.html">Residential</a></li><li><a href="services/commercial.html">Commercial</a></li><li><a href="services/deodorizer.html">Deodorizer</a></li></ul></div>
+      <div class="footer-nav"><h4>Locations</h4><ul><li><a href="locations/athens.html">Athens, GA</a></li><li><a href="locations/gainesville.html">Gainesville, GA</a></li><li><a href="locations/index.html">View All Areas</a></li></ul></div>
+      <div class="footer-nav"><h4>About</h4><ul><li><a href="about.html">About Us</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div class="container footer-bottom-inner"><p>© 2026 Dirty Dawgs • Your Trusted Pet Waste Removers</p></div></div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const zip = new URLSearchParams(window.location.search).get('zip');
+    if (zip) {
+      document.getElementById('hNiaZip').value = zip;
+      document.getElementById('zipBadge').textContent  = 'Zip code: ' + zip;
+      document.getElementById('zipBadge').style.display = 'inline-block';
+      document.getElementById('zipNote').textContent   = 'Zip code ' + zip + ' is not currently in our service area.';
+    }
+
+    document.getElementById('niaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('niaSubmitBtn');
+      let valid = true;
+      this.querySelectorAll('[required]').forEach(function(el) {
+        el.style.borderColor = '';
+        if (!el.value.trim()) { el.style.borderColor = '#e05c5c'; valid = false; }
+      });
+      if (!valid) return;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          document.getElementById('niaForm').style.display = 'none';
+          document.getElementById('niaSuccess').style.display = 'block';
+        } else { btn.disabled = false; btn.textContent = 'Notify Me When You\'re in My Area'; alert('Something went wrong. Please email contact@dirtydawgss.com'); }
+      } catch(_) { btn.disabled = false; btn.textContent = 'Notify Me When You\'re in My Area'; }
+    });
+  </script>
+</body>
+</html>          <p><span class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.4 19.79 19.79 0 0 1 1.61 2.18 2 2 0 0 1 3.6 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 7.91a16 16 0 0 0 6 6l.72-.72a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.17z"/></svg></span> <a href="tel:6783279646">(678) 327-9646</a></p>
+
