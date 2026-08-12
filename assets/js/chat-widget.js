@@ -10,12 +10,15 @@
 
   var QUICK_REPLIES = ["Get a Quote", "Ask a Question", "Something Else"];
 
-  // Mobile browsers (esp. iOS Safari) size vh/dvh units against a viewport
-  // that ignores the address bar/toolbar, which can make fixed-position
-  // panels overflow the actually-visible screen. Measuring window.innerHeight
-  // directly and re-checking on resize is the reliable, long-standing fix.
+  // Mobile browsers (esp. iOS Safari) size vh/dvh units — and even
+  // window.innerHeight — against the full layout viewport, which does NOT
+  // shrink when the on-screen keyboard opens. visualViewport.height is the
+  // one measurement that actually reflects the space the keyboard leaves
+  // visible, which matters here since the chat input grabs focus (and so
+  // the keyboard) the moment the panel opens.
   function updateViewportHeightVar() {
-    document.documentElement.style.setProperty("--dd-vh", window.innerHeight * 0.01 + "px");
+    var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty("--dd-vh", h * 0.01 + "px");
   }
   updateViewportHeightVar();
   window.addEventListener("resize", updateViewportHeightVar);
