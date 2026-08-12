@@ -2,7 +2,6 @@
   "use strict";
 
   var CHAT_ENDPOINT = "/api/chat-send";
-  var TRIGGER_API_BASE = "https://api.trigger.dev";
   var POLL_INTERVAL_MS = 3000;
   var TIMEOUT_MINUTES = 45;
   var SESSION_KEY = "ddChatSessionId";
@@ -203,7 +202,7 @@
     sendBtn.disabled = isSending;
   }
 
-  function pollForReply(runId, token, deadline) {
+  function pollForReply(runId, deadline) {
     if (polling) clearInterval(polling);
     var typingEl = document.createElement("div");
     typingEl.className = "dd-chat-typing";
@@ -220,24 +219,17 @@
         return;
       }
 
-      fetch(TRIGGER_API_BASE + "/api/v1/runs/" + runId + "/result", {
-        headers: { Authorization: "Bearer " + token },
-      })
+      fetch("/api/chat-poll?runId=" + encodeURIComponent(runId))
         .then(function (res) {
-          if (res.status === 404) return null;
           if (!res.ok) throw new Error("poll failed: " + res.status);
           return res.json();
         })
         .then(function (data) {
-          if (!data) return;
+          if (!data.ok || !data.done) return;
           clearInterval(polling);
           typingEl.remove();
           setSending(false);
-          if (!data.ok) {
-            addMessage("system", "Something went wrong. Please call/text us at (678) 327-9646.");
-            return;
-          }
-          var output = data.outputType === "application/json" ? JSON.parse(data.output) : data.output;
+          var output = data.output;
           if (output && output.status === "replied") {
             addMessage("owner", output.reply);
           } else {
@@ -278,7 +270,7 @@
       })
       .then(function (data) {
         var deadline = Date.now() + (TIMEOUT_MINUTES + 5) * 60000;
-        pollForReply(data.runId, data.publicAccessToken, deadline);
+        pollForReply(data.runId, deadline);
       })
       .catch(function () {
         setSending(false);
