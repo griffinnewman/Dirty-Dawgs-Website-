@@ -48,6 +48,8 @@
     ".dd-chat-toggle svg{width:26px;height:26px;}" +
     ".dd-chat-toggle img{width:100%;height:100%;border-radius:50%;object-fit:cover;}" +
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
+    ".dd-chat-toggle-icon{position:absolute;bottom:-3px;right:-3px;width:24px;height:24px;background:var(--gold,#C0953A);border-radius:50%;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;}" +
+    ".dd-chat-toggle-icon svg{width:13px;height:13px;color:#fff;}" +
     ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
     ".dd-chat-backdrop.show{display:flex;}" +
     ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:420px;background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
@@ -108,6 +110,7 @@
   toggle.innerHTML =
     '<img src="' + AVATAR_SRC + '" alt="" onerror="this.style.display=&quot;none&quot;;this.nextElementSibling.style.display=&quot;block&quot;">' +
     '<svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
+    '<span class="dd-chat-toggle-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg></span>' +
     '<span class="dd-chat-badge" id="ddChatBadge">1</span>';
 
   var teaser = document.createElement("div");
