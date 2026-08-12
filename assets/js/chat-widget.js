@@ -81,6 +81,7 @@
     ".dd-chat-send:disabled{opacity:.5;cursor:not-allowed;}" +
     "@media(max-width:640px){" +
     ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
+    ".dd-chat-panel{bottom:80px;right:12px;left:12px;width:auto;max-width:none;height:auto;max-height:70dvh;}" +
     ".dd-chat-panel.expanded{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
     ".dd-chat-panel.expanded .dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));flex-shrink:0;}" +
     ".dd-chat-panel.expanded .dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;}" +
