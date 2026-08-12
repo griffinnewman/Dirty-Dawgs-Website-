@@ -46,6 +46,7 @@
     ".dd-chat-toggle:hover{transform:scale(1.06);}" +
     ".dd-chat-toggle-hidden{display:none;}" +
     ".dd-chat-toggle svg{width:26px;height:26px;}" +
+    ".dd-chat-toggle img{width:100%;height:100%;border-radius:50%;object-fit:cover;}" +
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
     ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
     ".dd-chat-backdrop.show{display:flex;}" +
