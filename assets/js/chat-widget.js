@@ -10,23 +10,6 @@
 
   var QUICK_REPLIES = ["Get a Quote", "Ask a Question", "Something Else"];
 
-  // Mobile browsers (esp. iOS Safari) size vh/dvh units — and even
-  // window.innerHeight — against the full layout viewport, which does NOT
-  // shrink when the on-screen keyboard opens. visualViewport.height is the
-  // one measurement that actually reflects the space the keyboard leaves
-  // visible, which matters here since the chat input grabs focus (and so
-  // the keyboard) the moment the panel opens.
-  function updateViewportHeightVar() {
-    var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-    document.documentElement.style.setProperty("--dd-vh", h * 0.01 + "px");
-  }
-  updateViewportHeightVar();
-  window.addEventListener("resize", updateViewportHeightVar);
-  window.addEventListener("orientationchange", updateViewportHeightVar);
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", updateViewportHeightVar);
-  }
-
   function uuid() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -65,7 +48,7 @@
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
     ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
     ".dd-chat-backdrop.show{display:flex;}" +
-    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(520px,calc(var(--dd-vh,1vh) * 70));background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
+    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:420px;background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
     ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}" +
     ".dd-chat-head-avatar{position:relative;width:42px;height:42px;flex-shrink:0;}" +
     ".dd-chat-head-avatar .dd-chat-avatar-fallback{width:100%;height:100%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);font-size:20px;}" +
@@ -241,7 +224,9 @@
     toggle.classList.add("dd-chat-toggle-hidden");
     badge.style.display = "none";
     dismissTeaser();
-    input.focus();
+    // Deliberately not auto-focusing the input — that opens the keyboard
+    // immediately, which shrinks the visible screen before the visitor has
+    // even seen the full card. Let them tap in when they're ready to type.
   }
   function closeChat() {
     opened = false;
