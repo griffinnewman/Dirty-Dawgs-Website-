@@ -7,6 +7,7 @@
   var SESSION_KEY = "ddChatSessionId";
   var MESSAGES_KEY = "ddChatMessages";
   var TEASER_DISMISSED_KEY = "ddChatTeaserDismissed";
+  var AVATAR_SRC = "/assets/img/griffin.jpg";
 
   var QUICK_REPLIES = ["Get a Quote", "Ask a Question", "Something Else"];
 
@@ -51,6 +52,7 @@
     ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:420px;background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
     ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}" +
     ".dd-chat-head-avatar{position:relative;width:42px;height:42px;flex-shrink:0;}" +
+    ".dd-chat-head-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.6);}" +
     ".dd-chat-head-avatar .dd-chat-avatar-fallback{width:100%;height:100%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);font-size:20px;}" +
     ".dd-chat-status-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:#4CAF6D;border:2px solid var(--teal,#3B5C45);}" +
     ".dd-chat-head-text{flex:1;min-width:0;}" +
@@ -66,7 +68,7 @@
     ".dd-chat-row.visitor{align-self:flex-end;flex-direction:row-reverse;}" +
     ".dd-chat-row.owner,.dd-chat-row.system{align-self:flex-start;}" +
     ".dd-chat-avatar-fallback{display:flex;align-items:center;justify-content:center;border-radius:50%;line-height:1;}" +
-    ".dd-chat-avatar-sm{width:24px;height:24px;background:var(--teal-light,#EAF0EA);font-size:13px;flex-shrink:0;}" +
+    ".dd-chat-avatar-sm{width:24px;height:24px;background:var(--teal-light,#EAF0EA);font-size:13px;flex-shrink:0;border-radius:50%;object-fit:cover;}" +
     ".dd-chat-msg{padding:9px 12px;border-radius:14px;font-size:.85rem;line-height:1.4;white-space:pre-wrap;}" +
     ".dd-chat-row.visitor .dd-chat-msg{background:var(--teal,#3B5C45);color:#fff;border-bottom-right-radius:4px;}" +
     ".dd-chat-row.owner .dd-chat-msg{background:#fff;color:var(--text,#2d2d2d);border:1px solid var(--light-gray,#f0f2f4);border-bottom-left-radius:4px;}" +
@@ -103,7 +105,8 @@
   toggle.className = "dd-chat-toggle";
   toggle.setAttribute("aria-label", "Chat with Dirty Dawgs");
   toggle.innerHTML =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
+    '<img src="' + AVATAR_SRC + '" alt="" onerror="this.style.display=&quot;none&quot;;this.nextElementSibling.style.display=&quot;block&quot;">' +
+    '<svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
     '<span class="dd-chat-badge" id="ddChatBadge">1</span>';
 
   var teaser = document.createElement("div");
@@ -121,7 +124,7 @@
   panel.className = "dd-chat-panel";
   panel.innerHTML =
     '<div class="dd-chat-head">' +
-    '<div class="dd-chat-head-avatar"><span class="dd-chat-avatar-fallback">🐾</span><span class="dd-chat-status-dot"></span></div>' +
+    '<div class="dd-chat-head-avatar"><img src="' + AVATAR_SRC + '" alt="Griffin" onerror="this.style.display=&quot;none&quot;;this.nextElementSibling.style.display=&quot;flex&quot;"><span class="dd-chat-avatar-fallback" style="display:none">🐾</span><span class="dd-chat-status-dot"></span></div>' +
     '<div class="dd-chat-head-text"><h4>Dirty Dawgs</h4><p>Chatting with Griffin</p></div>' +
     '<button class="dd-chat-close" aria-label="Close chat">&times;</button>' +
     "</div>" +
@@ -151,10 +154,20 @@
     var row = document.createElement("div");
     row.className = "dd-chat-row " + msg.from;
     if (msg.from === "owner" || msg.from === "system") {
-      var avatar = document.createElement("span");
-      avatar.className = "dd-chat-avatar-sm dd-chat-avatar-fallback";
-      avatar.textContent = "🐾";
-      row.appendChild(avatar);
+      var avatarImg = document.createElement("img");
+      avatarImg.className = "dd-chat-avatar-sm";
+      avatarImg.src = AVATAR_SRC;
+      avatarImg.alt = "";
+      var avatarFallback = document.createElement("span");
+      avatarFallback.className = "dd-chat-avatar-sm dd-chat-avatar-fallback";
+      avatarFallback.textContent = "🐾";
+      avatarFallback.style.display = "none";
+      avatarImg.onerror = function () {
+        this.style.display = "none";
+        avatarFallback.style.display = "flex";
+      };
+      row.appendChild(avatarImg);
+      row.appendChild(avatarFallback);
     }
     var bubble = document.createElement("div");
     bubble.className = "dd-chat-msg";
