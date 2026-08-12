@@ -80,10 +80,10 @@
     ".dd-chat-send svg{width:18px;height:18px;}" +
     ".dd-chat-send:disabled{opacity:.5;cursor:not-allowed;}" +
     "@media(max-width:640px){" +
-    ".dd-chat-panel{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
     ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
-    ".dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));flex-shrink:0;}" +
-    ".dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;}" +
+    ".dd-chat-panel.expanded{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
+    ".dd-chat-panel.expanded .dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));flex-shrink:0;}" +
+    ".dd-chat-panel.expanded .dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;}" +
     "}";
 
   var style = document.createElement("style");
@@ -185,6 +185,9 @@
   if (existingMessages.length === 0) {
     renderMessage({ from: "owner", text: "Hi, I'm Griffin 🐾 Ask me anything about pricing, scheduling, or your service area." });
     showQuickReplies();
+  } else {
+    // Returning to an existing conversation — skip the compact teaser step.
+    panel.classList.add("expanded");
   }
 
   var opened = false;
@@ -255,6 +258,7 @@
     if (!text) return;
 
     removeQuickReplies();
+    panel.classList.add("expanded");
 
     addMessage("visitor", text);
     input.value = "";
