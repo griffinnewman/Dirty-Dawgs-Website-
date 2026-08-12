@@ -10,6 +10,20 @@
 
   var QUICK_REPLIES = ["Get a Quote", "Ask a Question", "Something Else"];
 
+  // Mobile browsers (esp. iOS Safari) size vh/dvh units against a viewport
+  // that ignores the address bar/toolbar, which can make fixed-position
+  // panels overflow the actually-visible screen. Measuring window.innerHeight
+  // directly and re-checking on resize is the reliable, long-standing fix.
+  function updateViewportHeightVar() {
+    document.documentElement.style.setProperty("--dd-vh", window.innerHeight * 0.01 + "px");
+  }
+  updateViewportHeightVar();
+  window.addEventListener("resize", updateViewportHeightVar);
+  window.addEventListener("orientationchange", updateViewportHeightVar);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", updateViewportHeightVar);
+  }
+
   function uuid() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -48,7 +62,7 @@
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
     ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
     ".dd-chat-backdrop.show{display:flex;}" +
-    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(520px,70dvh);background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
+    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(520px,calc(var(--dd-vh,1vh) * 70));background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
     ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}" +
     ".dd-chat-head-avatar{position:relative;width:42px;height:42px;flex-shrink:0;}" +
     ".dd-chat-head-avatar .dd-chat-avatar-fallback{width:100%;height:100%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);font-size:20px;}" +
