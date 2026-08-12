@@ -19,3 +19,9 @@
 
 # Node (if ever added)
 node_modules/
+
+# Trigger.dev
+.trigger
+
+# Netlify
+.netlify

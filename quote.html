@@ -645,6 +645,7 @@
               <input type="hidden" name="Zip Code"      id="hZip">
               <input type="hidden" name="Dogs"          id="hDogs">
               <input type="hidden" name="Frequency"     id="hFreq">
+              <input type="hidden" name="Marketing Allowed" id="hMarketing">
 
               <!-- Name row -->
               <div class="srow">
@@ -709,6 +710,23 @@
                 </select>
               </div>
 
+              <!-- Last cleaned (required for onboarding) -->
+              <div class="qfield">
+                <label for="sfLastCleaned">When was your yard last thoroughly cleaned? *</label>
+                <select id="sfLastCleaned" name="Last Cleaned" class="qinput" required>
+                  <option value="" disabled selected>Select...</option>
+                  <option value="one_week">Within the last week</option>
+                  <option value="two_weeks">1-2 weeks ago</option>
+                  <option value="three_weeks">2-3 weeks ago</option>
+                  <option value="one_month">About a month ago</option>
+                  <option value="two_months">About 2 months ago</option>
+                  <option value="3-4_months">3-4 months ago</option>
+                  <option value="5-6_months">5-6 months ago</option>
+                  <option value="7-9_months">7-9 months ago</option>
+                  <option value="10+_months">10+ months ago / never</option>
+                </select>
+              </div>
+
               <!-- Card on file via Stripe -->
               <div class="qfield">
                 <label>Card on File *</label>
@@ -734,6 +752,12 @@
                   <option>Saw a truck or yard sign in my neighborhood</option>
                   <option>Other</option>
                 </select>
+              </div>
+
+              <!-- Terms agreement -->
+              <div class="consent-wrap">
+                <input type="checkbox" id="sfTerms" name="Terms Accepted" required>
+                <p>I agree to the <a href="#" target="_blank" rel="noopener">Terms of Service</a> and authorize Dirty Dawgs to charge my card on file for scheduled services. *</p>
               </div>
 
               <button type="submit" class="qsubmit" id="signupSubmitBtn">Complete My Sign Up</button>
@@ -789,10 +813,15 @@
       4: [        22,    26,      50,      90],
     };
     var FREQ_LABELS = ['Two Times A Week', 'Once A Week', 'Bi-Weekly', 'Once A Month'];
+    var FREQ_ENUM   = ['two_times_a_week', 'once_a_week', 'bi_weekly', 'once_a_month'];
 
     // Stripe state — set by initStripe() below
     var stripeReady = false;
     var stripe, cardElement;
+
+    // Set on step 1 submit, read on step 2 submit (for the Sweep&Go payload)
+    var lastDogs = 1;
+    var lastFreqIdx = 1;
 
     // ── Pre-fill zip ──────────────────────────────────────────
     const urlZip = new URLSearchParams(window.location.search).get('zip');
@@ -849,6 +878,9 @@
       var dogLbl  = dogs === 1 ? '1 Dog' : dogs + ' Dogs';
       var planTxt = freqLbl + ' \xb7 ' + dogLbl;
 
+      lastDogs    = dogs;
+      lastFreqIdx = freqIdx;
+
       document.getElementById('priceNum').textContent    = price;
       document.getElementById('priceDetail').textContent = planTxt;
       document.getElementById('sPlan').textContent       = planTxt;
@@ -860,6 +892,7 @@
       document.getElementById('hZip').value   = document.getElementById('zipInput').value;
       document.getElementById('hDogs').value  = dogLbl;
       document.getElementById('hFreq').value  = freqLbl;
+      document.getElementById('hMarketing').value = document.getElementById('smsConsent').checked ? '1' : '0';
 
       document.getElementById('quoteForm').style.display      = 'none';
       document.getElementById('priceAndSignup').style.display = 'block';
@@ -875,18 +908,24 @@
       const btn  = document.getElementById('signupSubmitBtn');
       const form = this;
 
-      // Validate required text/select fields
+      // Validate required text/select/checkbox fields
       let valid = true;
       form.querySelectorAll('input[required], select[required]').forEach(function(el) {
         el.style.borderColor = '';
-        if (!el.value.trim()) { el.style.borderColor = '#e05c5c'; valid = false; }
+        if (el.type === 'checkbox') {
+          if (!el.checked) valid = false;
+        } else if (!el.value.trim()) {
+          el.style.borderColor = '#e05c5c';
+          valid = false;
+        }
       });
-      if (!valid) return;
+      if (!valid) { alert('Please fill in all required fields and agree to the Terms of Service.'); return; }
 
       btn.disabled    = true;
       btn.textContent = 'Processing…';
 
       // Tokenize card via Stripe if configured
+      let cardSummary = null;
       if (stripeReady) {
         const name = (document.getElementById('sfFirst').value + ' ' + document.getElementById('sfLast').value).trim();
         const { token, error } = await stripe.createToken(cardElement, { name });
@@ -901,7 +940,47 @@
         let hiddenTok = form.querySelector('[name="Stripe Token"]');
         if (!hiddenTok) { hiddenTok = document.createElement('input'); hiddenTok.type = 'hidden'; hiddenTok.name = 'Stripe Token'; form.appendChild(hiddenTok); }
         hiddenTok.value = token.id;
+        // Non-sensitive summary only — Stripe never exposes the full card number to us.
+        cardSummary = {
+          stripeToken:  token.id,
+          cardBrand:    token.card && token.card.brand,
+          cardLast4:    token.card && token.card.last4,
+          cardExpMonth: token.card && token.card.exp_month,
+          cardExpYear:  token.card && token.card.exp_year,
+        };
       }
+
+      // Actually saves the card on file in Sweep&Go (Formspree below is just
+      // an email notification and can't do that itself). Fire independently —
+      // its own failure alerts the owner directly and shouldn't block the
+      // customer-facing success screen.
+      fetch('/api/quote-signup', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: document.getElementById('sfFirst').value.trim(),
+          lastName:  document.getElementById('sfLast').value.trim(),
+          email:     document.getElementById('sfEmail').value.trim(),
+          phone:     document.getElementById('phone').value.trim(),
+          homeAddress: document.getElementById('sfAddress').value.trim(),
+          city:      document.getElementById('sfCity').value.trim(),
+          state:     document.getElementById('sfState').value.trim().toUpperCase(),
+          zip:       document.getElementById('zipInput').value.trim(),
+          dogs:      lastDogs,
+          frequency: FREQ_ENUM[lastFreqIdx],
+          lastCleaned: document.getElementById('sfLastCleaned').value,
+          termsAccepted: document.getElementById('sfTerms').checked,
+          marketingAllowed: document.getElementById('smsConsent').checked,
+          couponCode: document.getElementById('coupon').value.trim() || undefined,
+          gateLocation: document.getElementById('sfGate').value.trim() || undefined,
+          dogSafety: (form.querySelector('input[name="Dog Safety"]:checked') || {}).value,
+          notificationPreference: document.getElementById('sfNotif').value || undefined,
+          howHeard: document.getElementById('sfSource').value || undefined,
+          planLabel: document.getElementById('hPlan').value,
+          pricePerVisit: document.getElementById('hPrice').value,
+          ...(cardSummary || {}),
+        }),
+      }).catch(function (err) { console.warn('quote-signup relay failed', err); });
 
       try {
         const res = await fetch(form.action, {
@@ -955,5 +1034,6 @@
       }
     }());
   </script>
+  <script src="/assets/js/chat-widget.js" defer></script>
 </body>
 </html>
