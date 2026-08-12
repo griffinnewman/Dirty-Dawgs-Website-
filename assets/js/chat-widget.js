@@ -6,6 +6,7 @@
   var TIMEOUT_MINUTES = 45;
   var SESSION_KEY = "ddChatSessionId";
   var MESSAGES_KEY = "ddChatMessages";
+  var TEASER_DISMISSED_KEY = "ddChatTeaserDismissed";
   var AVATAR_SRC = "/assets/img/griffin.jpg";
 
   var QUICK_REPLIES = ["Get a Quote", "Ask a Question", "Something Else"];
@@ -79,7 +80,14 @@
     ".dd-chat-send{background:var(--gold,#C0953A);color:#fff;border:none;border-radius:50%;width:38px;height:38px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}" +
     ".dd-chat-send svg{width:18px;height:18px;}" +
     ".dd-chat-send:disabled{opacity:.5;cursor:not-allowed;}" +
+    "@keyframes ddChatPulse{0%{box-shadow:0 0 0 0 rgba(59,92,69,.5);}70%{box-shadow:0 0 0 16px rgba(59,92,69,0);}100%{box-shadow:0 0 0 0 rgba(59,92,69,0);}}" +
+    ".dd-chat-toggle.pulse{animation:ddChatPulse 1.8s ease-out 3;}" +
+    ".dd-chat-teaser{position:fixed;bottom:92px;right:20px;max-width:220px;background:#fff;color:var(--text,#2d2d2d);padding:12px 30px 12px 14px;border-radius:14px 14px 4px 14px;box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));font-size:.85rem;line-height:1.4;z-index:9998;cursor:pointer;display:none;}" +
+    ".dd-chat-teaser.show{display:block;animation:ddChatTeaserIn .25s ease;}" +
+    "@keyframes ddChatTeaserIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}" +
+    ".dd-chat-teaser-close{position:absolute;top:4px;right:6px;background:none;border:none;font-size:16px;line-height:1;cursor:pointer;color:var(--text-muted,#7A7A7A);padding:4px;}" +
     "@media(max-width:640px){" +
+    ".dd-chat-teaser{right:12px;bottom:82px;}" +
     ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
     ".dd-chat-panel{bottom:80px;right:12px;left:12px;width:auto;max-width:none;height:auto;max-height:70dvh;}" +
     ".dd-chat-panel.expanded{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
@@ -98,6 +106,12 @@
     '<img src="' + AVATAR_SRC + '" alt="" onerror="this.style.display=&quot;none&quot;;this.nextElementSibling.style.display=&quot;block&quot;">' +
     '<svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
     '<span class="dd-chat-badge" id="ddChatBadge">1</span>';
+
+  var teaser = document.createElement("div");
+  teaser.className = "dd-chat-teaser";
+  teaser.innerHTML =
+    '<button class="dd-chat-teaser-close" aria-label="Dismiss">&times;</button>' +
+    "<p>👋 Got a question? We're here to help!</p>";
 
   var todayLabel = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
 
@@ -121,6 +135,7 @@
     "</div>";
 
   document.body.appendChild(toggle);
+  document.body.appendChild(teaser);
   document.body.appendChild(panel);
 
   var body = panel.querySelector("#ddChatBody");
@@ -191,14 +206,29 @@
     panel.classList.add("expanded");
   }
 
+  function dismissTeaser() {
+    teaser.classList.remove("show");
+    toggle.classList.remove("pulse");
+    sessionStorage.setItem(TEASER_DISMISSED_KEY, "1");
+  }
+
   var opened = false;
+  function openChat() {
+    opened = true;
+    panel.classList.add("open");
+    toggle.classList.add("dd-chat-toggle-hidden");
+    badge.style.display = "none";
+    dismissTeaser();
+    input.focus();
+  }
+
   toggle.addEventListener("click", function () {
-    opened = !opened;
-    panel.classList.toggle("open", opened);
-    toggle.classList.toggle("dd-chat-toggle-hidden", opened);
     if (opened) {
-      badge.style.display = "none";
-      input.focus();
+      opened = false;
+      panel.classList.remove("open");
+      toggle.classList.remove("dd-chat-toggle-hidden");
+    } else {
+      openChat();
     }
   });
   closeBtn.addEventListener("click", function () {
@@ -206,6 +236,22 @@
     panel.classList.remove("open");
     toggle.classList.remove("dd-chat-toggle-hidden");
   });
+  teaser.addEventListener("click", function (e) {
+    if (e.target.closest(".dd-chat-teaser-close")) {
+      dismissTeaser();
+      return;
+    }
+    openChat();
+  });
+
+  if (existingMessages.length === 0 && !sessionStorage.getItem(TEASER_DISMISSED_KEY)) {
+    setTimeout(function () {
+      if (!opened) {
+        teaser.classList.add("show");
+        toggle.classList.add("pulse");
+      }
+    }, 5000);
+  }
 
   var polling = null;
 
