@@ -50,8 +50,8 @@
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
     ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
     ".dd-chat-backdrop.show{display:flex;}" +
-    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(600px,85dvh);background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
-    ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;}" +
+    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(520px,70dvh);background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
+    ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}" +
     ".dd-chat-head-avatar{position:relative;width:42px;height:42px;flex-shrink:0;}" +
     ".dd-chat-head-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.6);}" +
     ".dd-chat-status-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:#4CAF6D;border:2px solid var(--teal,#3B5C45);}" +
@@ -76,7 +76,7 @@
     ".dd-chat-quick{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;padding-left:30px;}" +
     ".dd-chat-quick button{background:#fff;border:1.5px solid var(--teal,#3B5C45);color:var(--teal,#3B5C45);border-radius:999px;padding:6px 12px;font-size:.78rem;font-weight:600;cursor:pointer;}" +
     ".dd-chat-quick button:hover{background:var(--teal-light,#EAF0EA);}" +
-    ".dd-chat-foot{border-top:1px solid var(--light-gray,#f0f2f4);padding:10px;display:flex;align-items:flex-end;gap:8px;background:#fff;}" +
+    ".dd-chat-foot{border-top:1px solid var(--light-gray,#f0f2f4);padding:10px;display:flex;align-items:flex-end;gap:8px;background:#fff;flex-shrink:0;}" +
     ".dd-chat-foot textarea{flex:1;resize:none;border:1px solid var(--light-gray,#f0f2f4);border-radius:20px;padding:9px 14px;font-family:inherit;font-size:16px;height:38px;max-height:80px;}" +
     ".dd-chat-send{background:var(--gold,#C0953A);color:#fff;border:none;border-radius:50%;width:38px;height:38px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}" +
     ".dd-chat-send svg{width:18px;height:18px;}" +
@@ -206,6 +206,9 @@
   if (existingMessages.length === 0) {
     renderMessage({ from: "owner", text: "Hi, I'm Griffin 🐾 Ask me anything about pricing, scheduling, or your service area." });
     showQuickReplies();
+    // Start scrolled to the top (disclaimer + greeting), not auto-scrolled
+    // to the bottom like it would be for an active back-and-forth.
+    body.scrollTop = 0;
   } else {
     // Returning to an existing conversation — skip the compact teaser step.
     panel.classList.add("expanded");
