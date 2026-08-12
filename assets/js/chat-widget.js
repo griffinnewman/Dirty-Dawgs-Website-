@@ -48,10 +48,9 @@
     ".dd-chat-toggle svg{width:26px;height:26px;}" +
     ".dd-chat-toggle img{width:100%;height:100%;border-radius:50%;object-fit:cover;}" +
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
-    ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;}" +
-    ".dd-chat-backdrop.show{display:block;}" +
-    ".dd-chat-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;max-width:calc(100vw - 32px);height:auto;max-height:min(600px,85dvh);background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:none;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
-    ".dd-chat-panel.open{display:flex;}" +
+    ".dd-chat-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}" +
+    ".dd-chat-backdrop.show{display:flex;}" +
+    ".dd-chat-panel{width:380px;max-width:100%;height:auto;max-height:min(600px,85dvh);background:#fff;border-radius:var(--radius,12px);box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));z-index:9999;display:flex;flex-direction:column;overflow:hidden;font-family:var(--font,sans-serif);}" +
     ".dd-chat-head{background:var(--teal,#3B5C45);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;}" +
     ".dd-chat-head-avatar{position:relative;width:42px;height:42px;flex-shrink:0;}" +
     ".dd-chat-head-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.6);}" +
@@ -91,7 +90,8 @@
     "@media(max-width:640px){" +
     ".dd-chat-teaser{right:12px;bottom:82px;}" +
     ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
-    ".dd-chat-panel.expanded{position:fixed;top:0;right:0;bottom:0;left:0;transform:none;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
+    ".dd-chat-backdrop.expanded{padding:0;}" +
+    ".dd-chat-panel.expanded{width:100%;max-width:100%;height:100%;max-height:100%;border-radius:0;}" +
     ".dd-chat-panel.expanded .dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));flex-shrink:0;}" +
     ".dd-chat-panel.expanded .dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;}" +
     "}";
@@ -138,10 +138,10 @@
     "</button>" +
     "</div>";
 
+  backdrop.appendChild(panel);
   document.body.appendChild(backdrop);
   document.body.appendChild(toggle);
   document.body.appendChild(teaser);
-  document.body.appendChild(panel);
 
   var body = panel.querySelector("#ddChatBody");
   var input = panel.querySelector("#ddChatInput");
@@ -209,6 +209,7 @@
   } else {
     // Returning to an existing conversation — skip the compact teaser step.
     panel.classList.add("expanded");
+    backdrop.classList.add("expanded");
   }
 
   function dismissTeaser() {
@@ -220,7 +221,6 @@
   var opened = false;
   function openChat() {
     opened = true;
-    panel.classList.add("open");
     backdrop.classList.add("show");
     toggle.classList.add("dd-chat-toggle-hidden");
     badge.style.display = "none";
@@ -229,7 +229,6 @@
   }
   function closeChat() {
     opened = false;
-    panel.classList.remove("open");
     backdrop.classList.remove("show");
     toggle.classList.remove("dd-chat-toggle-hidden");
   }
@@ -242,7 +241,9 @@
     }
   });
   closeBtn.addEventListener("click", closeChat);
-  backdrop.addEventListener("click", closeChat);
+  backdrop.addEventListener("click", function (e) {
+    if (e.target === backdrop) closeChat();
+  });
   teaser.addEventListener("click", function (e) {
     if (e.target.closest(".dd-chat-teaser-close")) {
       dismissTeaser();
@@ -313,6 +314,7 @@
 
     removeQuickReplies();
     panel.classList.add("expanded");
+    backdrop.classList.add("expanded");
 
     addMessage("visitor", text);
     input.value = "";
