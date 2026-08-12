@@ -80,7 +80,7 @@
     ".dd-chat-send svg{width:18px;height:18px;}" +
     ".dd-chat-send:disabled{opacity:.5;cursor:not-allowed;}" +
     "@media(max-width:640px){" +
-    ".dd-chat-panel{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;max-width:100%;max-height:100vh;max-height:100dvh;border-radius:0;}" +
+    ".dd-chat-panel{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-width:none;max-height:none;border-radius:0;}" +
     ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
     ".dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));flex-shrink:0;}" +
     ".dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;}" +
