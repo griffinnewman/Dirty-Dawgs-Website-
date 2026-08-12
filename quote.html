@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <!-- Stripe.js for secure card collection -->
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     /* ── Page shell ─────────────────────── */
     .qpage {
@@ -240,6 +242,19 @@
     }
     .price-banner-amount sup { font-size: 1.8rem; vertical-align: super; }
     .price-banner-per  { font-size: .9rem; color: rgba(255,255,255,.5); margin-bottom: 8px; }
+    /* Stripe card element styled to match other inputs */
+    .stripe-card-wrap {
+      border: 1.5px solid #dde0e4;
+      border-radius: 8px;
+      padding: 12px 13px;
+      background: #fff;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .stripe-card-wrap.focused {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(192,149,58,.12);
+    }
+    #stripe-errors { font-size: .78rem; color: #c0392b; margin-top: 5px; min-height: 16px; }
     .price-banner-detail {
       display: inline-block;
       background: rgba(192,149,58,.2);
@@ -462,6 +477,7 @@
         font-size: 1rem;
       }
       select.qinput { border-radius: 14px; }
+      .stripe-card-wrap { border-radius: 14px; }
 
       /* ── Quote button — clean solid pill, no gradients ── */
       .qsubmit {
@@ -610,20 +626,158 @@
             <p class="price-banner-free">First cleanup FREE with recurring service!</p>
           </div>
 
-          <!-- Signup — handed off directly to Sweep&Go's own hosted form so
-               card-on-file is saved correctly by the same system that
-               manages billing/scheduling, instead of relaying a token
-               through our own backend. -->
+          <!-- Signup form directly below -->
           <div class="signup-body">
             <h3>Sign Up Now</h3>
             <p class="signup-plan">Plan: <strong id="sPlan"></strong> &mdash; <strong id="sPrice"></strong>/mo</p>
-            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">
-              Complete your signup securely below — this connects directly to our scheduling system, so your card on file is saved correctly the first time.
-            </p>
-            <iframe id="sngSignupFrame" title="Complete your Dirty Dawgs signup"
-              style="width:100%;min-height:900px;border:none;border-radius:var(--radius-sm);display:block;"></iframe>
+
+            <!--
+              FORMSPREE SETUP (free, 2 min):
+              1. formspree.io → New Form → "Dirty Dawgs Signups"
+              2. Set email → contact@dirtydawgss.com
+              3. Replace YOUR_FORM_ID with your real form ID
+            -->
+            <form id="signupForm" action="https://formspree.io/f/xjglbbdl" method="POST" novalidate>
+              <input type="hidden" name="_subject"      value="New Client Signup – Dirty Dawgs">
+              <input type="hidden" name="Service Plan"  id="hPlan">
+              <input type="hidden" name="Monthly Price" id="hPrice">
+              <input type="hidden" name="Phone"         id="hPhone">
+              <input type="hidden" name="Zip Code"      id="hZip">
+              <input type="hidden" name="Dogs"          id="hDogs">
+              <input type="hidden" name="Frequency"     id="hFreq">
+              <input type="hidden" name="Marketing Allowed" id="hMarketing">
+
+              <!-- Name row -->
+              <div class="srow">
+                <div class="qfield">
+                  <label for="sfFirst">First Name *</label>
+                  <input type="text" id="sfFirst" name="First Name" class="qinput" required placeholder="Jane">
+                </div>
+                <div class="qfield">
+                  <label for="sfLast">Last Name *</label>
+                  <input type="text" id="sfLast" name="Last Name" class="qinput" required placeholder="Smith">
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="qfield">
+                <label for="sfEmail">Your Email Address *</label>
+                <input type="email" id="sfEmail" name="Email" class="qinput" required placeholder="jane@email.com">
+              </div>
+
+              <!-- Address -->
+              <div class="qfield">
+                <label for="sfAddress">Home Address *</label>
+                <input type="text" id="sfAddress" name="Home Address" class="qinput" required placeholder="123 Main St">
+              </div>
+
+              <!-- City + State row -->
+              <div class="srow">
+                <div class="qfield">
+                  <label for="sfCity">City *</label>
+                  <input type="text" id="sfCity" name="City" class="qinput" required placeholder="Athens">
+                </div>
+                <div class="qfield">
+                  <label for="sfState">State *</label>
+                  <input type="text" id="sfState" name="State" class="qinput" required placeholder="GA" maxlength="2" style="text-transform:uppercase;">
+                </div>
+              </div>
+
+              <!-- Dog safety -->
+              <div class="qfield">
+                <label>Is it safe for us to be in the yard with your dog?</label>
+                <div class="radio-group">
+                  <label class="radio-opt"><input type="radio" name="Dog Safety" value="Yes, it's safe"> Yes, it's safe</label>
+                  <label class="radio-opt"><input type="radio" name="Dog Safety" value="No, please keep out"> No, please keep out</label>
+                  <label class="radio-opt"><input type="radio" name="Dog Safety" value="Dog will be inside"> Dog will be inside</label>
+                </div>
+              </div>
+
+              <!-- Gate location -->
+              <div class="qfield">
+                <label for="sfGate">Where is your gate located?</label>
+                <input type="text" id="sfGate" name="Gate Location" class="qinput" placeholder="e.g. Left side of house, back yard only, no gate">
+              </div>
+
+              <!-- Notification preference -->
+              <div class="qfield">
+                <label for="sfNotif">How would you like to receive cleanup notifications?</label>
+                <select id="sfNotif" name="Notification Preference" class="qinput">
+                  <option value="" disabled selected>Select...</option>
+                  <option>Text message</option>
+                  <option>Email</option>
+                  <option>Both text and email</option>
+                </select>
+              </div>
+
+              <!-- Last cleaned (required for onboarding) -->
+              <div class="qfield">
+                <label for="sfLastCleaned">When was your yard last thoroughly cleaned? *</label>
+                <select id="sfLastCleaned" name="Last Cleaned" class="qinput" required>
+                  <option value="" disabled selected>Select...</option>
+                  <option value="one_week">Within the last week</option>
+                  <option value="two_weeks">1-2 weeks ago</option>
+                  <option value="three_weeks">2-3 weeks ago</option>
+                  <option value="one_month">About a month ago</option>
+                  <option value="two_months">About 2 months ago</option>
+                  <option value="3-4_months">3-4 months ago</option>
+                  <option value="5-6_months">5-6 months ago</option>
+                  <option value="7-9_months">7-9 months ago</option>
+                  <option value="10+_months">10+ months ago / never</option>
+                </select>
+              </div>
+
+              <!-- Card on file via Stripe -->
+              <div class="qfield">
+                <label>Card on File *</label>
+                <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:8px;line-height:1.5;">
+                  Securely saved via Stripe. Your card won't be charged until service begins.
+                </p>
+                <div class="stripe-card-wrap" id="stripe-card-wrap">
+                  <div id="card-element"></div>
+                </div>
+                <div id="stripe-errors"></div>
+              </div>
+
+              <!-- How did you hear about us -->
+              <div class="qfield">
+                <label for="sfSource">Please tell us how you heard about us *</label>
+                <select id="sfSource" name="How They Heard" class="qinput" required>
+                  <option value="" disabled selected>Select...</option>
+                  <option>Google Search</option>
+                  <option>Facebook</option>
+                  <option>Instagram</option>
+                  <option>Nextdoor</option>
+                  <option>Referral from a friend</option>
+                  <option>Saw a truck or yard sign in my neighborhood</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <!-- Terms agreement -->
+              <div class="consent-wrap">
+                <input type="checkbox" id="sfTerms" name="Terms Accepted" required>
+                <p>I agree to the <a href="#" target="_blank" rel="noopener">Terms of Service</a> and authorize Dirty Dawgs to charge my card on file for scheduled services. *</p>
+              </div>
+
+              <button type="submit" class="qsubmit" id="signupSubmitBtn">Complete My Sign Up</button>
+              <p style="text-align:center;font-size:.78rem;color:var(--text-muted);margin-top:12px;">
+                We'll confirm your first appointment within one business day. No commitment required.
+              </p>
+            </form>
           </div>
         </div><!-- /priceAndSignup -->
+
+        <!-- SUCCESS STATE -->
+        <div class="signup-success" id="signupSuccess">
+          <div class="signup-success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2>You're All Set!</h2>
+          <p>Welcome to Dirty Dawgs! We'll reach out within one business day to confirm your first cleanup appointment and get a card on file.</p>
+          <a href="index.html" class="qsubmit" style="display:block;text-decoration:none;text-align:center;">Back to Home</a>
+        </div>
 
       </div><!-- /qcard -->
     </div>
@@ -659,9 +813,15 @@
       4: [        22,    26,      50,      90],
     };
     var FREQ_LABELS = ['Two Times A Week', 'Once A Week', 'Bi-Weekly', 'Once A Month'];
-    // Best-effort query param passed to Sweep&Go's own signup form — harmless if unused.
-    var FREQ_PARAM  = ['twice-weekly', 'weekly', 'biweekly', 'monthly'];
-    var SIGNUP_BASE_URL = 'https://client.sweepandgo.com/wohoo-dogs-k9rt7/register';
+    var FREQ_ENUM   = ['two_times_a_week', 'once_a_week', 'bi_weekly', 'once_a_month'];
+
+    // Stripe state — set by initStripe() below
+    var stripeReady = false;
+    var stripe, cardElement;
+
+    // Set on step 1 submit, read on step 2 submit (for the Sweep&Go payload)
+    var lastDogs = 1;
+    var lastFreqIdx = 1;
 
     // ── Pre-fill zip ──────────────────────────────────────────
     const urlZip = new URLSearchParams(window.location.search).get('zip');
@@ -718,19 +878,21 @@
       var dogLbl  = dogs === 1 ? '1 Dog' : dogs + ' Dogs';
       var planTxt = freqLbl + ' \xb7 ' + dogLbl;
 
+      lastDogs    = dogs;
+      lastFreqIdx = freqIdx;
+
       document.getElementById('priceNum').textContent    = price;
       document.getElementById('priceDetail').textContent = planTxt;
       document.getElementById('sPlan').textContent       = planTxt;
       document.getElementById('sPrice').textContent      = '$' + price;
 
-      // Best-effort pre-fill of Sweep&Go's own signup form — if it doesn't
-      // recognize these query params it just ignores them.
-      var zip = document.getElementById('zipInput').value.trim();
-      var params = new URLSearchParams();
-      if (zip) params.set('zip', zip);
-      params.set('dogs', dogs);
-      params.set('frequency', FREQ_PARAM[freqIdx]);
-      document.getElementById('sngSignupFrame').src = SIGNUP_BASE_URL + '?' + params.toString();
+      document.getElementById('hPlan').value  = planTxt;
+      document.getElementById('hPrice').value = '$' + price + '/visit';
+      document.getElementById('hPhone').value = document.getElementById('phone').value;
+      document.getElementById('hZip').value   = document.getElementById('zipInput').value;
+      document.getElementById('hDogs').value  = dogLbl;
+      document.getElementById('hFreq').value  = freqLbl;
+      document.getElementById('hMarketing').value = document.getElementById('smsConsent').checked ? '1' : '0';
 
       document.getElementById('quoteForm').style.display      = 'none';
       document.getElementById('priceAndSignup').style.display = 'block';
@@ -738,6 +900,139 @@
         document.querySelector('.price-banner').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
+
+    // ── Step 2 → success: submit signup form ─────────────────
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn  = document.getElementById('signupSubmitBtn');
+      const form = this;
+
+      // Validate required text/select/checkbox fields
+      let valid = true;
+      form.querySelectorAll('input[required], select[required]').forEach(function(el) {
+        el.style.borderColor = '';
+        if (el.type === 'checkbox') {
+          if (!el.checked) valid = false;
+        } else if (!el.value.trim()) {
+          el.style.borderColor = '#e05c5c';
+          valid = false;
+        }
+      });
+      if (!valid) { alert('Please fill in all required fields and agree to the Terms of Service.'); return; }
+
+      btn.disabled    = true;
+      btn.textContent = 'Processing…';
+
+      // Tokenize card via Stripe if configured
+      let cardSummary = null;
+      if (stripeReady) {
+        const name = (document.getElementById('sfFirst').value + ' ' + document.getElementById('sfLast').value).trim();
+        const { token, error } = await stripe.createToken(cardElement, { name });
+        if (error) {
+          document.getElementById('stripe-errors').textContent = error.message;
+          btn.disabled    = false;
+          btn.textContent = 'Complete My Sign Up';
+          document.getElementById('stripe-card-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        // Add token to form data
+        let hiddenTok = form.querySelector('[name="Stripe Token"]');
+        if (!hiddenTok) { hiddenTok = document.createElement('input'); hiddenTok.type = 'hidden'; hiddenTok.name = 'Stripe Token'; form.appendChild(hiddenTok); }
+        hiddenTok.value = token.id;
+        // Non-sensitive summary only — Stripe never exposes the full card number to us.
+        cardSummary = {
+          stripeToken:  token.id,
+          cardBrand:    token.card && token.card.brand,
+          cardLast4:    token.card && token.card.last4,
+          cardExpMonth: token.card && token.card.exp_month,
+          cardExpYear:  token.card && token.card.exp_year,
+        };
+      }
+
+      // Actually saves the card on file in Sweep&Go (Formspree below is just
+      // an email notification and can't do that itself). Fire independently —
+      // its own failure alerts the owner directly and shouldn't block the
+      // customer-facing success screen.
+      fetch('/api/quote-signup', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: document.getElementById('sfFirst').value.trim(),
+          lastName:  document.getElementById('sfLast').value.trim(),
+          email:     document.getElementById('sfEmail').value.trim(),
+          phone:     document.getElementById('phone').value.trim(),
+          homeAddress: document.getElementById('sfAddress').value.trim(),
+          city:      document.getElementById('sfCity').value.trim(),
+          state:     document.getElementById('sfState').value.trim().toUpperCase(),
+          zip:       document.getElementById('zipInput').value.trim(),
+          dogs:      lastDogs,
+          frequency: FREQ_ENUM[lastFreqIdx],
+          lastCleaned: document.getElementById('sfLastCleaned').value,
+          termsAccepted: document.getElementById('sfTerms').checked,
+          marketingAllowed: document.getElementById('smsConsent').checked,
+          couponCode: document.getElementById('coupon').value.trim() || undefined,
+          gateLocation: document.getElementById('sfGate').value.trim() || undefined,
+          dogSafety: (form.querySelector('input[name="Dog Safety"]:checked') || {}).value,
+          notificationPreference: document.getElementById('sfNotif').value || undefined,
+          howHeard: document.getElementById('sfSource').value || undefined,
+          planLabel: document.getElementById('hPlan').value,
+          pricePerVisit: document.getElementById('hPrice').value,
+          ...(cardSummary || {}),
+        }),
+      }).catch(function (err) { console.warn('quote-signup relay failed', err); });
+
+      try {
+        const res = await fetch(form.action, {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('priceAndSignup').style.display = 'none';
+          document.getElementById('signupSuccess').style.display  = 'block';
+          requestAnimationFrame(function() {
+            document.getElementById('signupSuccess').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        } else {
+          btn.disabled    = false;
+          btn.textContent = 'Complete My Sign Up';
+          alert('Something went wrong. Please email us at contact@dirtydawgss.com');
+        }
+      } catch (_) {
+        btn.disabled    = false;
+        btn.textContent = 'Complete My Sign Up';
+        alert('Network error. Please email us at contact@dirtydawgss.com');
+      }
+    });
+
+    // ── Stripe init — LAST so it never blocks form listeners ──
+    (function initStripe() {
+      var STRIPE_KEY = 'pk_live_51SfB1LCysA1sdvYJGCNhAIBWzXZkKxsFIkhoxVh4CX8HVxVgzbyKRG9CceSSPef540DA5PfBPUkPbT8vsD55Pt3W00gyDVbYs2';
+      try {
+        stripe      = Stripe(STRIPE_KEY);
+        var elems   = stripe.elements({
+          fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap' }]
+        });
+        cardElement = elems.create('card', {
+          style: {
+            base: { fontFamily: "'Roboto', sans-serif", fontSize: '15px', color: '#2d2d2d', '::placeholder': { color: '#999' } },
+            invalid: { color: '#c0392b' }
+          }
+        });
+        cardElement.mount('#card-element');
+        cardElement.on('focus',  function() { document.getElementById('stripe-card-wrap').classList.add('focused'); });
+        cardElement.on('blur',   function() { document.getElementById('stripe-card-wrap').classList.remove('focused'); });
+        cardElement.on('change', function(ev) {
+          document.getElementById('stripe-errors').textContent = ev.error ? ev.error.message : '';
+        });
+        stripeReady = true;
+      } catch(err) {
+        var wrap = document.getElementById('stripe-card-wrap');
+        if (wrap) wrap.style.display = 'none';
+        console.warn('Stripe card element not available:', err.message);
+      }
+    }());
   </script>
   <script src="/assets/js/chat-widget.js" defer></script>
 </body>
