@@ -16,12 +16,21 @@ function requireEnv(name: string): string {
   return value;
 }
 
+// SMS providers silently fail to deliver messages well past a normal chat
+// length (thousands of characters), so cap what actually gets embedded in
+// the outbound text regardless of what the client sent.
+const MAX_MESSAGE_LENGTH = 500;
+
 export const chatMessageTask = task({
   id: "chat-message",
   run: async (payload: ChatMessagePayload) => {
     const ownerPhone = requireEnv("GHL_OWNER_PHONE");
     const owner = await upsertContact({ phone: ownerPhone, tags: ["dirty-dawgs-owner"] });
 
+    const message =
+      payload.message.length > MAX_MESSAGE_LENGTH
+        ? payload.message.slice(0, MAX_MESSAGE_LENGTH) + "…"
+        : payload.message;
     const pageLine = payload.page ? `\nOn: ${payload.page}` : "";
 
     const timeoutMinutes = payload.timeoutMinutes ?? 45;
@@ -32,7 +41,7 @@ export const chatMessageTask = task({
 
     await sendSms(
       owner.id,
-      `💬 A visitor on dogpoopsmells.com: "${payload.message}"${pageLine}\n\nReply to this text to answer them live in the chat. (Expires in ${timeoutMinutes} min.)`
+      `💬 A visitor on dogpoopsmells.com: "${message}"${pageLine}\n\nReply to this text to answer them live in the chat. (Expires in ${timeoutMinutes} min.)`
     );
 
     logger.info("Waiting for owner reply", { tokenId: token.id, sessionId: payload.sessionId });

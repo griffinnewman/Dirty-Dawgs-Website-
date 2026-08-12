@@ -107,7 +107,7 @@
     '<div class="dd-chat-date">' + todayLabel + "</div>" +
     "</div>" +
     '<div class="dd-chat-foot">' +
-    '<textarea id="ddChatInput" placeholder="Type a message..."></textarea>' +
+    '<textarea id="ddChatInput" placeholder="Type a message..." maxlength="500"></textarea>' +
     '<button id="ddChatSend" class="dd-chat-send" aria-label="Send">' +
     '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>' +
     "</button>" +
