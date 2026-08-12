@@ -43,6 +43,7 @@
   var css =
     ".dd-chat-toggle{position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;background:var(--teal,#3B5C45);color:#fff;border:none;box-shadow:var(--shadow-lg,0 8px 40px rgba(0,0,0,.14));cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:transform .15s ease;padding:0;overflow:visible;}" +
     ".dd-chat-toggle:hover{transform:scale(1.06);}" +
+    ".dd-chat-toggle-hidden{display:none;}" +
     ".dd-chat-toggle svg{width:26px;height:26px;}" +
     ".dd-chat-toggle img{width:100%;height:100%;border-radius:50%;object-fit:cover;}" +
     ".dd-chat-badge{position:absolute;top:-2px;right:-2px;background:var(--gold,#C0953A);color:#fff;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}" +
@@ -78,7 +79,12 @@
     ".dd-chat-send{background:var(--gold,#C0953A);color:#fff;border:none;border-radius:50%;width:38px;height:38px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}" +
     ".dd-chat-send svg{width:18px;height:18px;}" +
     ".dd-chat-send:disabled{opacity:.5;cursor:not-allowed;}" +
-    "@media(max-width:480px){.dd-chat-panel{right:16px;left:16px;width:auto;bottom:86px;}}";
+    "@media(max-width:640px){" +
+    ".dd-chat-panel{right:0;left:0;top:0;bottom:0;width:100%;height:100%;max-width:100%;max-height:100%;border-radius:0;}" +
+    ".dd-chat-toggle{width:52px;height:52px;bottom:16px;right:16px;}" +
+    ".dd-chat-head{padding:16px;padding-top:max(16px,env(safe-area-inset-top));}" +
+    ".dd-chat-foot{padding-bottom:max(10px,env(safe-area-inset-bottom));}" +
+    "}";
 
   var style = document.createElement("style");
   style.textContent = css;
@@ -185,6 +191,7 @@
   toggle.addEventListener("click", function () {
     opened = !opened;
     panel.classList.toggle("open", opened);
+    toggle.classList.toggle("dd-chat-toggle-hidden", opened);
     if (opened) {
       badge.style.display = "none";
       input.focus();
@@ -193,6 +200,7 @@
   closeBtn.addEventListener("click", function () {
     opened = false;
     panel.classList.remove("open");
+    toggle.classList.remove("dd-chat-toggle-hidden");
   });
 
   var polling = null;
